@@ -95,6 +95,7 @@ Match Analysis returns a structured `MatchAnalysis` object.
   "recommendation": "strong_fit",
   "summary": "Strong match with a specific gap in Zoho/Deluge experience."
 }
+```
 
 ## Pipeline
 
