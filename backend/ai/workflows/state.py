@@ -2,6 +2,7 @@ from typing import Any, TypedDict
 
 from schemas.application import CoverLetter
 from schemas.match import MatchAnalysis
+from schemas.recruiter_response import RecruiterLintResult
 
 
 class ApplicationState(TypedDict):
@@ -10,3 +11,4 @@ class ApplicationState(TypedDict):
 
     match_analysis: MatchAnalysis | None
     cover_letter: CoverLetter | None
+    recruiter_lint: RecruiterLintResult | None
