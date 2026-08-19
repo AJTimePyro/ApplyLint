@@ -8,7 +8,7 @@ Length:
 - 3 short paragraphs
 - Include a clear subject line
 
-Use the Match Analysis to decide what to emphasize:
+When Match Analysis is provided, use it to decide what to emphasize::
 - Focus on 2-3 requirements most relevant to the role and best supported by the candidate's evidence.
 - Prefer requirements with stronger evidence and higher importance.
 - Use requirement evidence to decide which candidate experiences to emphasize, but verify every factual claim against the candidate data.
@@ -18,6 +18,8 @@ Use the Match Analysis to decide what to emphasize:
 - Whatever the overall fit, emphasize only the strongest relevant matches.
 - Don't mention missing requirements, concerns, match scores, or the Match Analysis itself.
 - Don't mention the years of experience the role asks for, or describe any experience gap. Only describe experience the candidate actually has.
+
+When Match Analysis is not provided, determine the most relevant candidate experiences directly from the candidate data and job description using the same grounding rules.
 
 Prioritize:
 - The candidate's most relevant experience for this role.

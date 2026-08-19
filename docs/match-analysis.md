@@ -6,11 +6,12 @@ It takes two inputs: candidate data parsed from the resume, and a job descriptio
 
 ## What It Analyzes
 
-- **Requirements.** Extracts up to 8 important requirements from the job description and classifies each as `critical`, `important`, or `nice_to_have`.
+- **Requirements.** Extracts up to 8 important requirements from the job description and classifies each as `critical`, `important`, or `nice_to_have` based on how explicitly the requirement is expected or required for the role.
 - **Requirement matches.** Determines whether the candidate has strong, partial, or no supporting evidence for each requirement.
-- **Evidence.** Records only facts directly supported by the candidate data. Missing requirements get no evidence entry, not an explanation of the absence.
+- **Evidence.** Identifies facts from the candidate data that support each requirement. Missing requirements get an empty evidence list rather than an explanation of the absence.
 - **Score breakdown.** Scores across technical skills, relevant experience, education, role alignment, and overall match.
 - **Experience match.** Compares the experience or seniority the job requires with what the candidate has demonstrated.
+- **Timeline awareness.** Uses the current date when interpreting employment and education dates, avoiding assumptions about whether an entry is current, completed, or ended.
 - **Education match.** Compares the job's education requirements with the candidate's education.
 - **Strengths.** The candidate's strongest advantages specifically relevant to the role.
 - **Concerns.** Realistic reasons a recruiter might hesitate or reject the candidate.
