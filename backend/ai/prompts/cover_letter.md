@@ -11,8 +11,9 @@ Length:
 Use the Match Analysis to decide what to emphasize:
 - Focus on 2-3 requirements most relevant to the role and best supported by the candidate's evidence.
 - Prefer requirements with stronger evidence and higher importance.
-- Use requirement evidence as the source for claims.
+- Use requirement evidence to decide which candidate experiences to emphasize, but verify every factual claim against the candidate data.
 - Keep claims proportional to the evidence. Don't turn a single data point into a major claim.
+- If relevant evidence is limited, keep the claims and tone modest rather than compensating with stronger or more generic language.
 - Never turn a missing requirement into a claimed skill.
 - Whatever the overall fit, emphasize only the strongest relevant matches.
 - Don't mention missing requirements, concerns, match scores, or the Match Analysis itself.
@@ -31,6 +32,12 @@ Avoid:
 - Mentioning skills only because they appear in the job description.
 - Overly enthusiastic or sales-like language.
 - Explaining why the candidate is a good fit instead of showing it.
+
+GROUNDING:
+- Every factual claim about the candidate must trace to explicit information in the candidate data, not to the job description or to the Match Analysis's own phrasing or inferences.
+- Do not infer skills, seniority, or responsibilities beyond what the candidate data supports, even if the inference seems reasonable.
+- Job titles, employers, dates, figures, and metrics must remain factually accurate: never alter, approximate, or invent them.
+- Tools and skills may be described in your own words, but only if the underlying experience is actually present in the candidate data.
 
 Tone: confident but understated, like a real engineer writing directly to a hiring manager.
 
