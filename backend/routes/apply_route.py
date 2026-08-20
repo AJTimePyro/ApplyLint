@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from core.db import get_db
 from schemas.apply import ApplyRequest, ApplyResponse
 from services.apply_service import ApplyService
+from utils.data_handler import serialize
 
 router = APIRouter()
 
@@ -33,7 +34,13 @@ async def stream_application(
 
         async def event_generator():
             async for update in workflow_stream:
-                yield f"data: {json.dumps(update, default=str)}\n\n"
+                stage, data = next(iter(update.items()))
+                event = {
+                    "stage": stage,
+                    "data": serialize(data),
+                }
+                yield f"data: {json.dumps(event, default=str)}\n\n"
+            yield 'data: {"stage":"completed"}\n\n'
 
         return StreamingResponse(
             event_generator(),

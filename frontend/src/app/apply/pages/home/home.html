@@ -1,0 +1,63 @@
+<div class="max-w-xl mx-auto p-6">
+  <h1 class="text-2xl font-semibold mb-4">Welcome</h1>
+
+  <textarea
+    hlmTextarea
+    [(ngModel)]="jobDescription"
+    placeholder="Paste the job description here..."
+    rows="8"
+    class="w-full"
+  ></textarea>
+
+  <button hlmBtn class="mt-3" (click)="onClick()" [disabled]="isRunning || !jobDescription.trim()">
+    {{ isRunning ? 'Analyzing...' : 'Analyze Application' }}
+  </button>
+
+  <!-- Match Analysis -->
+  @if (matchAnalysis) {
+  <section class="space-y-2">
+    <h2 class="text-xl font-semibold">Match Analysis</h2>
+
+    <div hlmCard class="p-4">
+      <pre class="whitespace-pre-wrap text-sm">{{ matchAnalysis | json }}</pre>
+    </div>
+  </section>
+  }
+
+  <!-- Generated Cover Letter -->
+  @if (coverLetter) {
+  <section class="space-y-2">
+    <h2 class="text-xl font-semibold">Generated Cover Letter</h2>
+
+    <div hlmCard class="p-6 space-y-4">
+      <h3 class="font-medium">{{ coverLetter.subject }}</h3>
+
+      <div class="whitespace-pre-wrap">{{ coverLetter.body }}</div>
+    </div>
+  </section>
+  }
+
+  <!-- Recruiter Lint -->
+  @if (recruiterLint) {
+  <section class="space-y-2">
+    <h2 class="text-xl font-semibold">Recruiter Lint</h2>
+
+    <div hlmCard class="p-4">
+      <pre class="whitespace-pre-wrap text-sm">{{ recruiterLint | json }}</pre>
+    </div>
+  </section>
+  }
+
+  <!-- Improved Application -->
+  @if (improvedCoverLetter) {
+  <section class="space-y-2">
+    <h2 class="text-xl font-semibold">Improved Application</h2>
+
+    <div hlmCard class="p-6 space-y-4">
+      <h3 class="font-medium">{{ improvedCoverLetter.subject }}</h3>
+
+      <div class="whitespace-pre-wrap">{{ improvedCoverLetter.body }}</div>
+    </div>
+  </section>
+  }
+</div>
