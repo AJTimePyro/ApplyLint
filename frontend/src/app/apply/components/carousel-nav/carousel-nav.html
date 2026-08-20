@@ -1,0 +1,37 @@
+<div class="flex items-center justify-between mb-4">
+  <div class="flex items-center gap-2">
+    <button
+      hlmBtn
+      variant="outline"
+      size="icon"
+      class="h-8 w-8"
+      [disabled]="index() === 0"
+      (click)="prev.emit()"
+    >
+      <ng-icon name="lucideChevronLeft" size="16" />
+    </button>
+    <button
+      hlmBtn
+      variant="outline"
+      size="icon"
+      class="h-8 w-8"
+      [disabled]="index() === total() - 1"
+      (click)="next.emit()"
+    >
+      <ng-icon name="lucideChevronRight" size="16" />
+    </button>
+    <span class="text-sm text-zinc-500 tabular-nums ml-2">{{ label() }}</span>
+  </div>
+
+  <div class="flex items-center gap-1.5">
+    @for (l of labels(); track l; let i = $index) {
+    <button
+      class="h-1.5 rounded-full transition-all"
+      [class]="i === index() ? 'w-6 bg-emerald-500' : 'w-1.5 bg-zinc-700 hover:bg-zinc-600'"
+      (click)="select.emit(i)"
+      [attr.aria-label]="l"
+      type="button"
+    ></button>
+    }
+  </div>
+</div>

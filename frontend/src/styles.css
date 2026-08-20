@@ -6,7 +6,7 @@
 @import '@spartan-ng/brain/hlm-tailwind-preset.css';
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 
   --font-sans:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',

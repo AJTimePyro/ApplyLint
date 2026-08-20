@@ -1,0 +1,26 @@
+<div class="flex items-center">
+  @for (stage of stages; track stage.key; let last = $last) {
+  <div class="flex items-center" [class.flex-1]="!last">
+    <div class="flex flex-col items-center gap-2 shrink-0">
+      <div
+        class="h-7 w-7 rounded-full border flex items-center justify-center text-[11px] font-medium transition-colors"
+        [class]="dotClass(stage.key)"
+      >
+        @if (isActive(stage.key)) {
+        <hlm-spinner class="h-3.5 w-3.5" />
+        } @else if (isDone(stage.key)) { ✓ } @else { {{ $index + 1 }} }
+      </div>
+      <span
+        class="text-[11px] uppercase tracking-wide whitespace-nowrap"
+        [class.text-zinc-300]="isDone(stage.key) || isActive(stage.key)"
+        [class.text-zinc-600]="!isDone(stage.key) && !isActive(stage.key)"
+      >
+        {{ stage.label }}
+      </span>
+    </div>
+    @if (!last) {
+    <div class="h-px flex-1 mx-2 mb-5 transition-colors" [class]="lineClass(stage.key)"></div>
+    }
+  </div>
+  }
+</div>

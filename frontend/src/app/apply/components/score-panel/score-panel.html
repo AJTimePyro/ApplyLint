@@ -1,0 +1,104 @@
+<div hlmCard class="space-y-6">
+  <div class="flex items-start justify-between gap-4">
+    <div>
+      <p class="text-xs uppercase tracking-wide text-zinc-500">Match analysis</p>
+      <h2 class="text-lg font-medium text-zinc-100 mt-1">Overall fit</h2>
+      <span hlmBadge [variant]="recommendationVariant()" class="mt-3 capitalize">
+        {{ data().recommendation.replaceAll('_', ' ') }}
+      </span>
+    </div>
+
+    <div class="relative h-20 w-20 shrink-0">
+      <svg viewBox="0 0 80 80" class="h-20 w-20 -rotate-90">
+        <circle cx="40" cy="40" r="34" fill="none" stroke-width="6" class="stroke-zinc-800" />
+        <circle
+          cx="40"
+          cy="40"
+          r="34"
+          fill="none"
+          stroke-width="6"
+          stroke-linecap="round"
+          class="stroke-emerald-500 transition-all duration-700"
+          [attr.stroke-dasharray]="circumference"
+          [attr.stroke-dashoffset]="dashOffset()"
+        />
+      </svg>
+      <span
+        class="absolute inset-0 flex items-center justify-center text-lg font-semibold tabular-nums text-zinc-100"
+      >
+        {{ overall() }}
+      </span>
+    </div>
+  </div>
+
+  <p class="text-sm text-zinc-400 leading-relaxed">{{ data().summary }}</p>
+
+  <hlm-separator />
+
+  <div class="space-y-3">
+    @for (item of breakdown(); track item.label) {
+    <div class="space-y-1.5">
+      <div class="flex items-center justify-between text-sm">
+        <span class="text-zinc-300">{{ item.label }}</span>
+        <span class="tabular-nums text-zinc-500">{{ item.value }}</span>
+      </div>
+      <hlm-progress [value]="item.value" class="h-1.5">
+        <hlm-progress-indicator class="bg-emerald-500" />
+      </hlm-progress>
+    </div>
+    }
+  </div>
+
+  <hlm-separator />
+
+  <div class="space-y-1">
+    <p class="text-xs uppercase tracking-wide text-zinc-500 mb-2">Requirements</p>
+    @for (req of data().requirements; track req.requirement) {
+    <div
+      class="flex items-start justify-between gap-4 py-2.5 border-b border-zinc-800/60 last:border-0"
+    >
+      <div>
+        <p class="text-sm text-zinc-200">{{ req.requirement }}</p>
+        <p class="text-xs text-zinc-500 mt-0.5 capitalize">
+          {{ req.importance.replaceAll('_', ' ') }} priority
+        </p>
+      </div>
+      <span
+        hlmBadge
+        [variant]="statusVariant(req.status)"
+        [class]="statusClass(req.status)"
+        class="shrink-0 capitalize"
+      >
+        {{ req.status.replaceAll('_', ' ') }}
+      </span>
+    </div>
+    }
+  </div>
+
+  @if (data().strengths.length || data().concerns.length) {
+  <hlm-separator />
+  <div class="grid sm:grid-cols-2 gap-6">
+    @if (data().strengths.length) {
+    <div class="space-y-2">
+      <p class="text-xs uppercase tracking-wide text-zinc-500">Strengths</p>
+      @for (s of data().strengths; track s.point) {
+      <div class="flex gap-2 text-sm text-zinc-400">
+        <span class="mt-1.5 h-1 w-1 rounded-full bg-emerald-500 shrink-0"></span>
+        <span>{{ s.point }}</span>
+      </div>
+      }
+    </div>
+    } @if (data().concerns.length) {
+    <div class="space-y-2">
+      <p class="text-xs uppercase tracking-wide text-zinc-500">Concerns</p>
+      @for (c of data().concerns; track c.concern) {
+      <div class="flex gap-2 text-sm text-zinc-400">
+        <span class="mt-1.5 h-1 w-1 rounded-full bg-amber-500 shrink-0"></span>
+        <span>{{ c.concern }}</span>
+      </div>
+      }
+    </div>
+    }
+  </div>
+  }
+</div>
