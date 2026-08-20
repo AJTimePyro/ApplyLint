@@ -21,18 +21,18 @@ Evaluate the `JOB_DESCRIPTION` against `CANDIDATE_DATA`.
 
 Only requirements that the job description explicitly describes as required, mandatory, essential, or necessary count as rejection grounds. Ignore perks, culture, and items described as nice-to-have, preferred, or bonus qualifications.
 
-| Code                               | Applies when                                                                                                                                          |
-| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `missing_required_skill`           | An explicitly required skill, tool, or technology is not supported by CANDIDATE_DATA                                                                  |
-| `missing_required_certification`   | An explicitly required certification or license is not supported                                                                                      |
-| `experience_level_mismatch`        | The candidate's demonstrated experience does not meet the required seniority or experience level                                                      |
-| `insufficient_relevant_experience` | Related experience exists, but there is not enough relevant hands-on experience                                                                       |
-| `insufficient_scope_or_scale`      | Relevant experience exists, but the documented scope, scale, complexity, or ownership is materially below what the role requires                      |
-| `missing_required_responsibility`  | Related skills exist, but an explicitly required responsibility is not demonstrated                                                                   |
-| `education_mismatch`               | The candidate's education does not meet an explicit education requirement                                                                             |
-| `missing_domain_experience`        | Required experience in a specific domain or industry is not supported                                                                                 |
-| `weak_role_alignment`              | The candidate's experience does not meaningfully match the role's core responsibilities overall                                                       |
-| `technology_or_use_case_mismatch`  | The candidate has related technology experience, but not the specific technology, environment, or use case explicitly required by the job description |
+| Code                               | Applies when                                                                                                               |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `missing_required_skill`           | An explicitly required skill, tool, or technology is not supported by CANDIDATE_DATA                                       |
+| `missing_required_certification`   | An explicitly required certification or license is not supported                                                           |
+| `experience_level_mismatch`        | The candidate's demonstrated experience does not meet the required seniority or experience level                           |
+| `insufficient_relevant_experience` | Related experience exists, but there is not enough relevant hands-on experience                                            |
+| `insufficient_scope_or_scale`      | Relevant experience exists, but its scope, scale, complexity, or ownership is below what the role requires                 |
+| `missing_required_responsibility`  | An expected or explicitly required responsibility listed as part of the role is not supported by CANDIDATE_DATA            |
+| `education_mismatch`               | The candidate's education does not meet an explicit education requirement                                                  |
+| `missing_domain_experience`        | Required experience in a specific domain or industry is not supported                                                      |
+| `weak_role_alignment`              | The candidate's experience does not meaningfully match the role's core responsibilities overall                            |
+| `technology_or_use_case_mismatch`  | Related experience exists, but not with the specific technology, environment, or use case required by the job description  |
 
 ### Application Grounding
 
@@ -71,7 +71,7 @@ Evaluate the `APPLICATION` on its own merits. Report an issue only when it mater
 
 ### Timeline / Requirement Consistency
 
-Codes 30–32 compare `JOB_DESCRIPTION` with `CANDIDATE_DATA`.
+Codes 29–31 compare `JOB_DESCRIPTION` with `CANDIDATE_DATA`.
 
 | Code                            | Applies when                                                                                                   |
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------- |
@@ -157,8 +157,8 @@ Use only the sources needed to establish the specific finding.
 
 * Codes 1–10 normally use `job_description` and `candidate_data`.
 * Codes 11–18 normally use `application` and `candidate_data`.
-* Codes 19–29 normally use `application`; add `job_description` when the finding depends on role-specific relevance or tailoring.
-* Codes 30–32 use `job_description` and `candidate_data`.
+* Codes 19–28 normally use `application`; add `job_description` when the finding depends on role-specific relevance or tailoring.
+* Codes 29–31 use `job_description` and `candidate_data`.
 
 For comparison-based findings, include multiple sources when necessary.
 

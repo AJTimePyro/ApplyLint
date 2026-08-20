@@ -1,6 +1,6 @@
 from langgraph.graph import END, START, StateGraph
 
-from ai.nodes.generate import generate_cover_letter
+from ai.nodes.generate import generate_cover_letter, improve_cover_letter
 from ai.nodes.match import analyze_match
 from ai.nodes.recruiter_lint import generate_recruiter_lint
 from ai.workflows.state import ApplicationState
@@ -39,6 +39,22 @@ def recruiter_lint_node(state: ApplicationState):
     }
 
 
+def improve_node(state: ApplicationState):
+    cover_letter = state.get("cover_letter")
+    rejection_feedback = state.get("recruiter_lint")
+    if cover_letter is None or rejection_feedback is None:
+        return {"cover_letter": None}
+
+    return {
+        "cover_letter": improve_cover_letter(
+            resume=state["resume"],
+            rejection_feedback=rejection_feedback,
+            cover_letter=cover_letter,
+            match_analysis=state["match_analysis"],
+        )
+    }
+
+
 def should_generate(state: ApplicationState):
     match_analysis = state.get("match_analysis")
     if match_analysis is not None and match_analysis.recommendation == "not_a_fit":
@@ -52,6 +68,7 @@ builder = (
     .add_node("match", match_node)
     .add_node("generate", generate_node)
     .add_node("recruiter_lint", recruiter_lint_node)
+    .add_node("improve", improve_node)
     .add_edge(START, "match")
     .add_conditional_edges(
         "match",
@@ -62,7 +79,8 @@ builder = (
         },
     )
     .add_edge("generate", "recruiter_lint")
-    .add_edge("recruiter_lint", END)
+    .add_edge("recruiter_lint", "improve")
+    .add_edge("improve", END)
 )
 
 application_workflow = builder.compile()
