@@ -1,6 +1,6 @@
 from typing import Any, TypedDict
 
-from schemas.application import CoverLetter
+from schemas.job_applications import CoverLetter
 from schemas.match import MatchAnalysis
 from schemas.recruiter_response import RecruiterLintResult
 

@@ -2,7 +2,7 @@ from typing import Any
 
 from ai.prompts.prompt_handler import get_prompt
 from ai.providers.ollama import llm
-from schemas.application import CoverLetter
+from schemas.job_applications import CoverLetter
 from schemas.match import MatchAnalysis
 from schemas.recruiter_response import RecruiterLintResult
 

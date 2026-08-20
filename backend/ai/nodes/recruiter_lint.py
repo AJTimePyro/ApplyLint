@@ -2,7 +2,7 @@ from typing import Any
 
 from ai.prompts.prompt_handler import get_prompt
 from ai.providers.ollama import llm
-from schemas.application import Application
+from schemas.job_applications import Application
 from schemas.recruiter_response import RecruiterLintResult
 
 
