@@ -29,14 +29,14 @@ export interface CoverLetter {
 
 export interface LintReason {
   code: string;
-  severity: 'critical' | 'medium' | 'low' | string;
+  severity: 'critical' | 'high' | 'medium' | 'low' | string;
   evidence: string;
   explanation: string;
   sources: string[];
 }
 
 export interface RecruiterLint {
-  decision: 'approve' | 'reject' | string;
+  decision: 'advance' | 'reject' | 'incomplete_evaluation' | string;
   reasons: LintReason[];
   summary: string;
 }

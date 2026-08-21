@@ -15,12 +15,14 @@ export class LintPanel {
   data = input.required<RecruiterLint>();
 
   protected severityVariant(severity: string) {
-    if (severity === 'critical') return 'destructive';
+    if (severity === 'critical' || severity === 'high') return 'destructive';
     if (severity === 'medium') return 'outline';
     return 'secondary';
   }
 
   protected severityClass(severity: string) {
-    return severity === 'medium' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : '';
+    if (severity === 'high') return 'bg-rose-500/10 text-rose-400 border-rose-500/20';
+    if (severity === 'medium') return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+    return '';
   }
 }
