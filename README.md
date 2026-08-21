@@ -69,7 +69,7 @@ source .venv/bin/activate
 
 pip install -r requirements.txt
 alembic upgrade head
-fastapi dev main.py
+uvicorn main:app
 ```
 
 The API runs at `http://localhost:8000`.
@@ -79,7 +79,8 @@ The API runs at `http://localhost:8000`.
 ```bash
 cd frontend
 npm install
-npm start
+npm run build
+npm run start
 ```
 
 The frontend runs at `http://localhost:4200`.
