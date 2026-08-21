@@ -1,44 +1,105 @@
 # Match Analysis
 
-The first stage of ApplyLint is figuring out how well a candidate matches a specific job before generating an application.
+The first stage of ApplyLint evaluates how well a candidate matches a specific job before generating an application.
 
-It takes two inputs: candidate data parsed from the resume, and a job description. The AI acts as a technical recruiter, evaluating the candidate against the most important requirements in the job description.
+It takes candidate data parsed from the resume and a job description, evaluating the candidate against core role requirements from the perspective of a technical recruiter.
 
-## What It Analyzes
+> [!NOTE]
+> **Related documentation:**
+> - [AI Workflow](./ai-workflow.md): complete multi-stage pipeline overview
 
-- **Requirements.** Extracts up to 8 important requirements from the job description and classifies each as `critical`, `important`, or `nice_to_have` based on how explicitly the requirement is expected or required for the role.
-- **Requirement matches.** Determines whether the candidate has strong, partial, or no supporting evidence for each requirement.
-- **Evidence.** Identifies facts from the candidate data that support each requirement. Missing requirements get an empty evidence list rather than an explanation of the absence.
-- **Score breakdown.** Scores across technical skills, relevant experience, education, role alignment, and overall match.
-- **Experience match.** Compares the experience or seniority the job requires with what the candidate has demonstrated.
-- **Timeline awareness.** Uses the current date when interpreting employment and education dates, avoiding assumptions about whether an entry is current, completed, or ended.
-- **Education match.** Compares the job's education requirements with the candidate's education.
-- **Strengths.** The candidate's strongest advantages specifically relevant to the role.
-- **Concerns.** Realistic reasons a recruiter might hesitate or reject the candidate.
-- **Recommendation.** One of `strong_fit`, `potential_fit`, `weak_fit`, or `not_a_fit`.
+---
 
-## Constraints
+## 1. Pipeline and Architectural Integration
 
-The analysis has to stay grounded in the supplied candidate data. It must not:
+```text
+Resume + Job Description
+           ↓
+     Match Analysis
+      ↙          ↘
+[not_a_fit]    [fit]
+    ↓             ↓
+   END      Cover Letter Generation
+```
 
-- Invent skills, experience, qualifications, or achievements
-- Assume missing evidence means the candidate lacks the skill
-- Treat unrelated experience as direct evidence
-- Add speculative recruiter concerns
+### Node Execution
+* **Node:** `match_node` in [`backend/ai/workflows/application.py`](../backend/ai/workflows/application.py)
+* **Invocation:** `analyze_match` in [`backend/ai/nodes/match.py`](../backend/ai/nodes/match.py)
+* **Signature:**
+  ```python
+  def analyze_match(
+      resume: dict[str, Any],
+      job_description: str,
+  ) -> MatchAnalysis: ...
+  ```
 
-Critical requirements also cap the score: a missing critical requirement caps the overall score at 60, and a partial match on one caps it at 75.
+### Routing Behavior
+After `match_node` completes, the workflow runs the `should_generate` conditional router:
+* **Early termination (`not_a_fit`):** If `recommendation == "not_a_fit"`, the workflow stops immediately at `END`, avoiding generation for incompatible roles.
+* **Proceed to generation (`fit`):** For `strong_fit`, `potential_fit`, or `weak_fit`, the workflow advances to `generate_node` with the `MatchAnalysis` object in state.
 
-## Output
+---
 
-The result comes back as a structured Pydantic model instead of free text, so later pipeline stages get predictable data to work with.
+## 2. What It Analyzes
 
-Match Analysis isn't the final application evaluation. It hands off the context the next stage, Generate, needs.
+- **Requirements:** Extracts up to 8 core requirements from the job description and classifies each as `critical`, `important`, or `nice_to_have`.
+- **Requirement matches:** Evaluates whether candidate evidence shows a strong match, partial match, or missing requirement.
+- **Evidence:** Cites supporting facts from Candidate Data. Missing requirements receive an empty evidence list.
+- **Score breakdown:** Scores technical skills, relevant experience, education, role alignment, and overall fit from 0 to 100.
+- **Experience match:** Compares required seniority with documented candidate experience.
+- **Timeline awareness:** Uses the current runtime date to interpret employment and education timelines without making assumptions.
+- **Education match:** Compares documented degrees and majors against stated prerequisites.
+- **Strengths:** Highlights the candidate's strongest advantages for the role.
+- **Concerns:** Identifies gaps or missing skills that could raise questions.
+- **Recommendation:** Returns `strong_fit`, `potential_fit`, `weak_fit`, or `not_a_fit`.
 
-## Output Structure
+---
 
-Match Analysis returns a structured `MatchAnalysis` object.
+## 3. Grounding and Score Constraints
 
-### Example
+The analysis stays grounded in Candidate Data:
+- Never invent skills, qualifications, metrics, or achievements.
+- Do not assume missing evidence means the candidate lacks the skill in real life.
+- Do not treat unrelated experience as direct evidence.
+- Do not add speculative recruiter concerns.
+
+### Score Caps
+To prevent inflated scores when mandatory qualifications are missing:
+* A missing `critical` requirement caps the overall match score at **60**.
+* A partial match on a `critical` requirement caps the overall match score at **75**.
+
+---
+
+## 4. Schema and Output Structure
+
+The output is returned as a structured `MatchAnalysis` Pydantic model defined in [`backend/schemas/match.py`](../backend/schemas/match.py):
+
+```python
+class MatchAnalysis(BaseModel):
+    score_breakdown: ScoreBreakdown
+    experience_match: ExperienceMatch | None
+    education_match: EducationMatch | None
+    requirements: list[RequirementAssessment]
+    strengths: list[Strength]
+    concerns: list[Concern]
+    recommendation: Literal["strong_fit", "potential_fit", "weak_fit", "not_a_fit"]
+    summary: str
+```
+
+TypeScript interface in [`frontend/src/app/apply/application.model.ts`](../frontend/src/app/apply/application.model.ts):
+
+```typescript
+export interface MatchAnalysis {
+  score_breakdown: ScoreBreakdown;
+  requirements: RequirementItem[];
+  strengths: { point: string; impact: string; evidence: string[] }[];
+  concerns: { concern: string; severity: string }[];
+  recommendation: string;
+  summary: string;
+}
+```
+
+### Example Payload
 
 ```json
 {
@@ -96,16 +157,4 @@ Match Analysis returns a structured `MatchAnalysis` object.
   "recommendation": "strong_fit",
   "summary": "Strong match with a specific gap in Zoho/Deluge experience."
 }
-```
-
-## Pipeline
-
-```text
-Resume + Job Description
-          ↓
-    Match Analysis
-          ↓
-   MatchAnalysis object
-          ↓
-       Generate
 ```

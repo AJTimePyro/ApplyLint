@@ -1,100 +1,99 @@
 # Cover Letter Generation
 
-The second stage of ApplyLint generates a targeted job application email / cover letter from the candidate data parsed from the resume and a specific job description.
+The second stage of ApplyLint drafts an initial cover letter from parsed Candidate Data and a job description.
 
-It supports two modes:
+> [!NOTE]
+> **Related documentation:**
+> - [AI Workflow](./ai-workflow.md): complete multi-stage pipeline overview
+> - [Match Analysis](./match-analysis.md): upstream role fit evaluation
 
-- **With Match Analysis:** Uses the analysis to prioritize the strongest relevant candidate experience.
-- **Without Match Analysis:** Evaluates the candidate data and job description directly to determine what experience to emphasize.
+---
 
-## Generation Behavior
+## 1. Pipeline and Architectural Integration
 
-- **Subject:** Generates a clear, role-specific subject line, preferably under 70 characters.
-- **Body:** Generates a 150–220 word application email in 3 short paragraphs. The word count applies to the full body, including the greeting and sign-off.
-- **Relevant experience:** Focuses on 2–3 candidate experiences most relevant to the role.
-- **Role alignment:** Connects those experiences to the role without turning job requirements into claims about the candidate.
+```text
+Resume + Job Description
+           ↓
+     Match Analysis
+           ↓
+Cover Letter Generation (with or without MatchAnalysis)
+           ↓
+     Recruiter Lint
+           ↓
+ Cover Letter Improvement
+```
 
-When the hiring manager's name is available in the job or application context, use it. Otherwise, use `Dear Hiring Manager`.
+### Node Execution
+* **Node:** `generate_node` in [`backend/ai/workflows/application.py`](../backend/ai/workflows/application.py)
+* **Invocation:** `generate_cover_letter` in [`backend/ai/nodes/generate.py`](../backend/ai/nodes/generate.py)
+* **Signature:**
+  ```python
+  def generate_cover_letter(
+      resume: dict[str, Any],
+      job_description: str,
+      match_analysis: MatchAnalysis | None = None,
+  ) -> CoverLetter: ...
+  ```
 
-If relevant evidence is limited, keep the claims and tone modest rather than compensating with generic or exaggerated language.
+### Operating Modes
+The node operates in two modes:
+1. **With Match Analysis:** Uses the upstream `MatchAnalysis` object to prioritize the candidate's strongest matching experiences and alignment points.
+2. **Without Match Analysis:** Directly evaluates candidate data and the job description to decide which experiences to emphasize.
 
-## Grounding
+---
 
-The candidate data is the source of truth.
+## 2. Generation Behavior
 
-The generator must not:
+- **Subject Line:** Produces a clear, role-specific subject line under 70 characters.
+- **Body:** Drafts a 150 to 220 word letter in 3 short paragraphs, including greeting and sign-off.
+- **Relevant Experience:** Highlights 2 to 3 candidate experiences most relevant to the role.
+- **Role Alignment:** Connects candidate background to role needs without turning job requirements into unsubstantiated candidate claims.
+- **Greeting:** Uses the hiring manager's name when available; defaults to `Dear Hiring Manager` otherwise.
 
-- Invent skills, experience, responsibilities, achievements, or qualifications.
-- Treat Match Analysis inferences or phrasing as candidate facts.
-- Infer skills, seniority, or responsibilities beyond what the candidate data supports.
-- Alter, approximate, or invent job titles, employers, dates, figures, or metrics.
-- Claim experience with any technology or responsibility that appears only in the job description and not in the candidate data.
+If relevant evidence is limited, it keeps claims modest rather than compensating with exaggerated language.
 
-Tools and skills may be paraphrased naturally, but the underlying experience must be explicitly supported by the candidate data.
+---
 
-## Style
+## 3. Grounding and Style Constraints
 
-The generated application should be:
+Candidate Data is the source of truth for all candidate facts:
+- Never invent skills, experience, responsibilities, metrics, or achievements.
+- Do not treat Match Analysis inferences or job description requirements as candidate facts.
+- Do not alter or approximate titles, employers, dates, or figures.
+- Never claim experience with a technology or responsibility that appears only in the job description.
 
-- Concise and role-specific
-- Professional and understated
-- Focused on concrete candidate experience
-- Written like a real engineer contacting a hiring manager
+### Style Guidelines
+- Written in a concise, professional, understated engineering tone.
+- Avoid generic filler, uncontextualized keyword lists, or repeating the resume as a bulleted summary.
+- Avoid promotional sales phrasing or claims of being a "perfect fit."
+- Do not mention match scores, evaluation concerns, missing requirements, or Match Analysis in the letter text.
 
-It should avoid:
+---
 
-- Generic filler
-- Unrelated technologies
-- Repeating the resume as a list
-- Overly enthusiastic or sales-like language
-- Mentioning match scores, concerns, missing requirements, or the Match Analysis itself
+## 4. Schema Definitions and Example Output
 
-## Match Analysis
+The output is returned as a structured `CoverLetter` Pydantic model defined in [`backend/schemas/job_applications.py`](../backend/schemas/job_applications.py):
 
-When provided, `MatchAnalysis` is used to prioritize which candidate experiences to emphasize. It is not an additional source of candidate facts.
+```python
+class CoverLetter(BaseModel):
+    subject: str
+    body: str
+```
 
-The `MatchAnalysis` schema is defined in `schemas/match.py`.
+TypeScript interface in [`frontend/src/app/apply/application.model.ts`](../frontend/src/app/apply/application.model.ts):
 
-The candidate data schema is defined in `schemas/candidate.py`.
+```typescript
+export interface CoverLetter {
+  subject: string;
+  body: string;
+}
+```
 
-Candidate data must always be used to verify factual claims, even when the Match Analysis provides supporting evidence or recommendations.
-
-## Output
-
-The result is returned as a structured `CoverLetter` Pydantic model with two fields:
-
-- `subject`
-- `body`
-
-The schema is defined in `schemas/application.py`.
-
-### Example
+### Example Payload
 
 ```json
 {
   "subject": "Application for Full Stack Developer - Abhijeet Gupta",
   "body": "Dear Hiring Manager,\n\nI am writing to apply for the Full Stack Developer position. As a Founding Engineer at Eshway, I led the development of LTD, an AI-powered project management platform serving 500+ active users. I also engineered AI capabilities including a RAG-based chatbot and AI-generated standups that automated daily reporting workflows.\n\nMy experience spans Python, FastAPI, React, Next.js, PostgreSQL, and Azure. At Eshway, I managed Azure infrastructure including Container Apps, Redis, Blob Storage, and PostgreSQL, maintaining 99.9% system uptime while executing a zero-downtime PostgreSQL migration from Neon to Azure. I also integrated ClickUp, Google Calendar, and Slack to enable real-time synchronization.\n\nI would welcome the opportunity to bring my experience in full-stack development, AI integration, and cloud infrastructure to your team. Thank you for considering my application.\n\nBest regards,\nAbhijeet Gupta"
 }
-```
-
-## Pipeline
-
-### With Match Analysis:
-
-```text
-Resume + Job Description
-          ↓
-    Match Analysis
-          ↓
-   MatchAnalysis object
-          ↓
-    Cover Letter
-```
-
-### Without Match Analysis:
-
-```text
-Resume + Job Description
-          ↓
-    Cover Letter
 ```
