@@ -1,37 +1,38 @@
-<div class="flex items-center justify-between mb-4">
+<div class="flex items-center justify-between mb-6 pb-4 border-b border-border">
   <div class="flex items-center gap-2">
     <button
-      hlmBtn
-      variant="outline"
-      size="icon"
-      class="h-8 w-8"
+      type="button"
+      class="h-8 w-8 rounded-lg border border-border bg-transparent hover:bg-surface-raised hover:border-border-strong text-ink-muted hover:text-ink disabled:opacity-30 disabled:pointer-events-none inline-flex items-center justify-center transition-all cursor-pointer"
       [disabled]="index() === 0"
       (click)="prev.emit()"
+      aria-label="Previous panel"
     >
-      <ng-icon name="lucideChevronLeft" size="16" />
+      <ng-icon name="lucideChevronLeft" size="16" strokeWidth="2" />
     </button>
     <button
-      hlmBtn
-      variant="outline"
-      size="icon"
-      class="h-8 w-8"
+      type="button"
+      class="h-8 w-8 rounded-lg border border-border bg-transparent hover:bg-surface-raised hover:border-border-strong text-ink-muted hover:text-ink disabled:opacity-30 disabled:pointer-events-none inline-flex items-center justify-center transition-all cursor-pointer"
       [disabled]="index() === total() - 1"
       (click)="next.emit()"
+      aria-label="Next panel"
     >
-      <ng-icon name="lucideChevronRight" size="16" />
+      <ng-icon name="lucideChevronRight" size="16" strokeWidth="2" />
     </button>
-    <span class="text-sm text-zinc-500 tabular-nums ml-2">{{ label() }}</span>
+    <span class="text-xs font-mono text-ink-muted tabular-nums ml-2 uppercase tracking-wide">
+      {{ label() }}
+    </span>
   </div>
 
-  <div class="flex items-center gap-1.5">
-    @for (l of labels(); track l; let i = $index) {
-    <button
-      class="h-1.5 rounded-full transition-all"
-      [class]="i === index() ? 'w-6 bg-emerald-500' : 'w-1.5 bg-zinc-700 hover:bg-zinc-600'"
-      (click)="select.emit(i)"
-      [attr.aria-label]="l"
-      type="button"
-    ></button>
+  <div class="flex items-center gap-2">
+    @for (l of labels(); track $index; let i = $index) {
+      <button
+        data-carousel-dot
+        class="h-1.5 rounded-full transition-all duration-300 cursor-pointer"
+        [class]="i === index() ? 'w-5 bg-accent' : 'w-1.5 bg-border-strong hover:bg-ink-faint'"
+        (click)="selectIndex.emit(i)"
+        [attr.aria-label]="l"
+        type="button"
+      ></button>
     }
   </div>
 </div>

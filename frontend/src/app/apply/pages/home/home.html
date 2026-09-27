@@ -1,69 +1,101 @@
-<div class="min-h-screen bg-zinc-950">
-  <div class="mx-auto px-6 py-16 space-y-8">
-    <header class="space-y-1">
-      <p class="text-xs uppercase tracking-wide text-zinc-500">Application pipeline</p>
-      <h1 class="text-2xl font-semibold text-zinc-100">Job Application Analyzer</h1>
-      <p class="text-sm text-zinc-500">
+<div class="min-h-screen bg-bg text-ink selection:bg-accent/25 selection:text-ink">
+  <div class="max-w-3xl mx-auto px-6 py-12 sm:py-16 space-y-8">
+    <header class="space-y-2">
+      <div class="flex items-center gap-2">
+        <span class="h-1.5 w-1.5 rounded-full bg-accent"></span>
+        <p class="text-xs uppercase font-mono tracking-widest text-ink-muted">
+          Application pipeline
+        </p>
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-serif font-medium text-ink tracking-tight">
+        Job Application Analyzer
+      </h1>
+      <p class="text-sm sm:text-base text-ink-muted leading-relaxed font-sans">
         Paste a job description to score your fit and draft a tailored cover letter.
       </p>
     </header>
 
-    <div
-      class="rounded-2xl bg-zinc-900 border border-zinc-800 shadow-lg shadow-black/40 p-6 space-y-4"
-    >
-      <textarea
-        hlmTextarea
-        [(ngModel)]="jobDescription"
-        placeholder="Paste the job description here…"
-        rows="8"
-        class="w-full bg-zinc-950 border-zinc-800 focus-visible:border-zinc-600"
-        [disabled]="isRunning"
-      ></textarea>
+    <div class="rounded-xl bg-surface border border-border shadow-2xl p-6 space-y-5">
+      <div class="space-y-2">
+        <label
+          for="job-description"
+          class="block text-xs uppercase font-mono tracking-wider text-ink-muted"
+        >
+          Job Description
+        </label>
+        <textarea
+          id="job-description"
+          [(ngModel)]="jobDescription"
+          placeholder="Paste the job description here…"
+          rows="8"
+          class="w-full bg-surface-raised border border-border rounded-lg p-4 text-ink placeholder:text-ink-faint font-sans text-sm leading-relaxed focus:outline-none focus:border-accent/80 focus:ring-1 focus:ring-accent/80 transition-all resize-y"
+          [disabled]="isRunning"
+        ></textarea>
+      </div>
 
-      <div class="flex items-center justify-between">
+      <div
+        class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-1"
+      >
         @if (isRunning) {
-        <app-stage-tracker
-          [completed]="completedStages()"
-          [active]="activeStage()"
-          class="flex-1 mr-6"
-        />
+          <app-stage-tracker
+            [completed]="completedStages()"
+            [active]="activeStage()"
+            class="flex-1 sm:mr-6"
+          />
         } @else {
-        <span></span>
+          <span class="hidden sm:inline"></span>
         }
         <button
-          hlmBtn
+          type="button"
           (click)="onClick()"
           [disabled]="isRunning || !jobDescription.trim()"
-          class="shrink-0"
+          class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-accent hover:bg-accent/90 active:bg-accent/80 text-white font-sans text-sm font-medium transition-all shadow-sm cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
         >
           @if (isRunning) {
-          <hlm-spinner class="h-4 w-4 mr-2" />
-          Analyzing } @else { Analyze Application }
+            <hlm-spinner class="h-4 w-4" />
+            <span>Analyzing…</span>
+          } @else {
+            <ng-icon name="lucideSparkles" size="15" strokeWidth="2" />
+            <span>Analyze Application</span>
+          }
         </button>
       </div>
     </div>
 
     @if (panels().length > 0) {
-    <div class="rounded-2xl bg-zinc-900 border border-zinc-800 shadow-lg shadow-black/40 p-6">
-      <app-carousel-nav
-        [index]="currentIndex()"
-        [total]="panels().length"
-        [labels]="panelLabels()"
-        (prev)="goPrev()"
-        (next)="goNext()"
-        (select)="goTo($event)"
-      />
+      <div class="rounded-xl bg-surface border border-border shadow-2xl p-6 sm:p-7">
+        <app-carousel-nav
+          [index]="currentIndex()"
+          [total]="panels().length"
+          [labels]="panelLabels()"
+          (prev)="goPrev()"
+          (next)="goNext()"
+          (selectIndex)="goTo($event)"
+        />
 
-      @switch (currentPanel()?.type) { @case ('match') {
-      <app-score-panel [data]="matchAnalysis()!" />
-      } @case ('cover') {
-      <app-letter-card [data]="coverLetter()!" eyebrow="Generated cover letter" />
-      } @case ('lint') {
-      <app-lint-panel [data]="recruiterLint()!" />
-      } @case ('improved') {
-      <app-letter-card [data]="improvedCoverLetter()!" eyebrow="Improved application" />
-      } }
-    </div>
+        @switch (currentPanel()?.type) {
+          @case ('match') {
+            @if (matchAnalysis(); as match) {
+              <app-score-panel [data]="match" />
+            }
+          }
+          @case ('cover') {
+            @if (coverLetter(); as cover) {
+              <app-letter-card [data]="cover" eyebrow="Generated cover letter" />
+            }
+          }
+          @case ('lint') {
+            @if (recruiterLint(); as lint) {
+              <app-lint-panel [data]="lint" />
+            }
+          }
+          @case ('improved') {
+            @if (improvedCoverLetter(); as improved) {
+              <app-letter-card [data]="improved" eyebrow="Improved application" />
+            }
+          }
+        }
+      </div>
     }
   </div>
 </div>

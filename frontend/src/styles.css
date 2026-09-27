@@ -8,68 +8,95 @@
 :root {
   color-scheme: dark;
 
-  --font-sans:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
-    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  /* Dark editorial custom properties */
+  --bg: #161310;
+  --surface: #1f1b17;
+  --surface-raised: #241f1a;
+  --border: #332c24;
+  --border-strong: #453d31;
+  --ink: #ede6db;
+  --ink-muted: #a79c8c;
+  --ink-faint: #786f60;
+  --accent: #e2544a;
+  --success: #5fae7b;
+  --warning: #d9a441;
 
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.13 0.028 261.692);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.13 0.028 261.692);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.13 0.028 261.692);
-  --primary: oklch(0.21 0.034 264.665);
-  --primary-foreground: oklch(0.985 0.002 247.839);
-  --secondary: oklch(0.967 0.003 264.542);
-  --secondary-foreground: oklch(0.21 0.034 264.665);
-  --muted: oklch(0.967 0.003 264.542);
-  --muted-foreground: oklch(0.551 0.027 264.364);
-  --accent: oklch(0.967 0.003 264.542);
-  --accent-foreground: oklch(0.21 0.034 264.665);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.928 0.006 264.531);
-  --input: oklch(0.928 0.006 264.531);
-  --ring: oklch(0.707 0.022 261.325);
-  --sidebar: oklch(0.985 0.002 247.839);
-  --sidebar-foreground: oklch(0.13 0.028 261.692);
-  --sidebar-primary: oklch(0.21 0.034 264.665);
-  --sidebar-primary-foreground: oklch(0.985 0.002 247.839);
-  --sidebar-accent: oklch(0.967 0.003 264.542);
-  --sidebar-accent-foreground: oklch(0.21 0.034 264.665);
-  --sidebar-border: oklch(0.928 0.006 264.531);
-  --sidebar-ring: oklch(0.707 0.022 261.325);
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Fraunces', Georgia, serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --radius: 0.75rem;
+  --background: #161310;
+  --foreground: #ede6db;
+  --card: #1f1b17;
+  --card-foreground: #ede6db;
+  --popover: #1f1b17;
+  --popover-foreground: #ede6db;
+  --primary: #e2544a;
+  --primary-foreground: #ffffff;
+  --secondary: #241f1a;
+  --secondary-foreground: #ede6db;
+  --muted: #241f1a;
+  --muted-foreground: #a79c8c;
+  --accent-spartan: #241f1a;
+  --accent-spartan-foreground: #ede6db;
+  --destructive: #e2544a;
+  --destructive-foreground: #ffffff;
+  --border: #332c24;
+  --input: #241f1a;
+  --ring: #e2544a;
+}
+
+@theme {
+  --color-bg: #161310;
+  --color-surface: #1f1b17;
+  --color-surface-raised: #241f1a;
+  --color-border: #332c24;
+  --color-border-strong: #453d31;
+  --color-ink: #ede6db;
+  --color-ink-muted: #a79c8c;
+  --color-ink-faint: #786f60;
+  --color-accent: #e2544a;
+  --color-success: #5fae7b;
+  --color-warning: #d9a441;
+
+  --font-serif: 'Fraunces', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 }
 
 :root.dark {
   color-scheme: dark;
 
-  --background: oklch(0.13 0.028 261.692);
-  --foreground: oklch(0.985 0.002 247.839);
-  --card: oklch(0.21 0.034 264.665);
-  --card-foreground: oklch(0.985 0.002 247.839);
-  --popover: oklch(0.21 0.034 264.665);
-  --popover-foreground: oklch(0.985 0.002 247.839);
-  --primary: oklch(0.928 0.006 264.531);
-  --primary-foreground: oklch(0.21 0.034 264.665);
-  --secondary: oklch(0.278 0.033 256.848);
-  --secondary-foreground: oklch(0.985 0.002 247.839);
-  --muted: oklch(0.278 0.033 256.848);
-  --muted-foreground: oklch(0.707 0.022 261.325);
-  --accent: oklch(0.278 0.033 256.848);
-  --accent-foreground: oklch(0.985 0.002 247.839);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --sidebar: oklch(0.21 0.034 264.665);
-  --sidebar-foreground: oklch(0.985 0.002 247.839);
-  --sidebar-primary: oklch(0.985 0.002 247.839);
-  --sidebar-primary-foreground: oklch(0.21 0.034 264.665);
-  --sidebar-accent: oklch(0.278 0.033 256.848);
-  --sidebar-accent-foreground: oklch(0.985 0.002 247.839);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  --bg: #161310;
+  --surface: #1f1b17;
+  --surface-raised: #241f1a;
+  --border: #332c24;
+  --border-strong: #453d31;
+  --ink: #ede6db;
+  --ink-muted: #a79c8c;
+  --ink-faint: #786f60;
+  --accent: #e2544a;
+  --success: #5fae7b;
+  --warning: #d9a441;
+
+  --background: #161310;
+  --foreground: #ede6db;
+  --card: #1f1b17;
+  --card-foreground: #ede6db;
+  --popover: #1f1b17;
+  --popover-foreground: #ede6db;
+  --primary: #e2544a;
+  --primary-foreground: #ffffff;
+  --secondary: #241f1a;
+  --secondary-foreground: #ede6db;
+  --muted: #241f1a;
+  --muted-foreground: #a79c8c;
+  --destructive: #e2544a;
+  --destructive-foreground: #ffffff;
+  --border: #332c24;
+  --input: #241f1a;
+  --ring: #e2544a;
 }
 
 @layer base {
@@ -77,6 +104,6 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-bg text-ink font-sans antialiased selection:bg-accent/25 selection:text-ink;
   }
 }

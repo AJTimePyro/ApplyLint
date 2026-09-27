@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Output, input } from '@angular/core';
-import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronLeft, lucideChevronRight } from '@ng-icons/lucide';
 
 @Component({
   selector: 'app-carousel-nav',
   standalone: true,
-  imports: [HlmButtonImports, NgIcon],
+  imports: [NgIcon],
   providers: [provideIcons({ lucideChevronLeft, lucideChevronRight })],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './carousel-nav.html',
@@ -18,9 +17,11 @@ export class CarouselNav {
 
   @Output() prev = new EventEmitter<void>();
   @Output() next = new EventEmitter<void>();
-  @Output() select = new EventEmitter<number>();
+  @Output() selectIndex = new EventEmitter<number>();
+  @Output() select = this.selectIndex;
 
   protected label() {
-    return `${this.index() + 1} / ${this.total()} — ${this.labels()[this.index()]}`;
+    const currentLabel = this.labels()[this.index()] ?? '';
+    return `${this.index() + 1} / ${this.total()}${currentLabel ? ' — ' + currentLabel : ''}`;
   }
 }

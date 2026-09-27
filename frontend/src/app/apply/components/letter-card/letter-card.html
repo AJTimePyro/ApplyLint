@@ -1,12 +1,28 @@
-<div hlmCard class="space-y-6">
+<div class="space-y-6">
   <div class="flex items-start justify-between gap-4">
-    <div>
-      <p class="text-xs uppercase tracking-wide text-zinc-500">{{ eyebrow() }}</p>
-      <h2 class="text-lg font-medium text-zinc-100 mt-1">{{ data().subject }}</h2>
+    <div class="space-y-1">
+      <p class="text-xs uppercase font-mono tracking-wider text-ink-muted">{{ eyebrow() }}</p>
+      <h2 class="text-[19px] font-serif font-medium text-ink leading-snug">{{ data().subject }}</h2>
     </div>
-    <button hlmBtn variant="outline" size="sm" class="shrink-0" (click)="copy()">
-      {{ copied() ? 'Copied' : 'Copy' }}
+    <button
+      type="button"
+      class="shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border hover:border-border-strong bg-transparent hover:bg-surface-raised text-ink-muted hover:text-ink text-xs font-mono transition-all cursor-pointer"
+      (click)="copy()"
+      [attr.aria-label]="copied() ? 'Copied to clipboard' : 'Copy cover letter'"
+    >
+      @if (copied()) {
+        <ng-icon name="lucideCheck" size="14" class="text-success" strokeWidth="2" />
+        <span>Copied</span>
+      } @else {
+        <ng-icon name="lucideCopy" size="14" strokeWidth="2" />
+        <span>Copy</span>
+      }
     </button>
   </div>
-  <p class="text-sm text-zinc-400 leading-relaxed whitespace-pre-wrap">{{ data().body }}</p>
+
+  <div class="border-t border-border pt-4">
+    <p class="text-[14.5px] font-sans text-ink leading-[1.75] whitespace-pre-wrap">
+      {{ data().body }}
+    </p>
+  </div>
 </div>

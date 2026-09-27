@@ -8,10 +8,9 @@ import {
   signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HlmButtonImports } from '@spartan-ng/helm/button';
-import { HlmTextareaImports } from '@spartan-ng/helm/textarea';
-import { HlmCardImports } from '@spartan-ng/helm/card';
 import { HlmSpinnerImports } from '@spartan-ng/helm/spinner';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideSparkles } from '@ng-icons/lucide';
 import { ApplyService } from '../../services/apply.service';
 import { StageTracker } from '../../components/stage-tracker/stage-tracker';
 import { ScorePanel } from '../../components/score-panel/score-panel';
@@ -31,16 +30,15 @@ interface Panel {
   standalone: true,
   imports: [
     FormsModule,
-    HlmTextareaImports,
-    HlmButtonImports,
-    HlmCardImports,
     HlmSpinnerImports,
+    NgIcon,
     StageTracker,
     ScorePanel,
     LintPanel,
     LetterCard,
     CarouselNav,
   ],
+  providers: [provideIcons({ lucideSparkles })],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home.html',
 })
@@ -76,17 +74,28 @@ export class Home {
 
   goPrev() {
     this.currentIndex.update((i) => Math.max(0, i - 1));
+    this.cdr.markForCheck();
   }
   goNext() {
     this.currentIndex.update((i) => Math.min(this.panels().length - 1, i + 1));
+    this.cdr.markForCheck();
   }
   goTo(i: number) {
     this.currentIndex.set(i);
+    this.cdr.markForCheck();
   }
 
   @HostListener('window:keydown', ['$event'])
   onKeydown(e: KeyboardEvent) {
     if (this.panels().length < 2) return;
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    const target = e.target as HTMLElement | null;
+    if (
+      target &&
+      (target.tagName === 'TEXTAREA' || target.tagName === 'INPUT' || target.isContentEditable)
+    ) {
+      return;
+    }
     if (e.key === 'ArrowLeft') this.goPrev();
     if (e.key === 'ArrowRight') this.goNext();
   }
@@ -148,8 +157,10 @@ export class Home {
           this.isRunning = false;
           break;
       }
-      // jump to the newest panel as it arrives
-      this.currentIndex.set(this.panels().length - 1);
+      // jump to the newest panel as it arrives during generation
+      if (update.stage !== 'completed') {
+        this.currentIndex.set(Math.max(0, this.panels().length - 1));
+      }
       this.cdr.markForCheck();
     };
 
