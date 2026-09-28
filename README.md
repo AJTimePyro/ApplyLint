@@ -5,7 +5,7 @@ ApplyLint is an AI workflow that prepares, audits, and refines job application c
 Instead of generating unverified text, ApplyLint runs an adversarial review loop: it evaluates candidate fit, drafts an initial letter, checks it against 32 canonical recruiter rejection codes, and rewrites the content to fix grounding errors without inventing missing qualifications.
 
 ## Demo
-<video src="https://github.com/user-attachments/assets/2cc3c7d4-ff4e-497a-9ff2-2bed5ca1a48b" autoplay loop muted playsinline width="100%">
+<video src="https://github.com/user-attachments/assets/e6c3081e-2cbe-49fa-8d9b-0343e5c1fe03" autoplay loop muted playsinline width="100%">
 </video>
 
 ---
